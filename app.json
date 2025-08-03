@@ -1,10 +1,58 @@
 {
   "expo": {
-    "scheme": "acme",
-    "plugins": [
-      "expo-router"
-    ],
     "name": "savorly-app",
-    "slug": "savorly-app"
+    "slug": "savorly-app",
+    "scheme": "acme",
+
+    "plugins": [
+      "expo-router",
+      "expo-video",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24
+          }
+        }
+      ]
+    ],
+
+    "android": {
+      "package": "com.company.savorlyapp",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+
+    "ios": {
+      "bundleIdentifier": "com.company.savorlyapp",
+      "supportsTablet": true
+    },
+
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f517f32e-e272-423f-bfe0-e48910e647f8"
+      }
+    },
+
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+
+    "assetBundlePatterns": [
+      "**/*"
+    ]
   }
 }

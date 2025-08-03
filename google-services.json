@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1092547273666",
+    "project_id": "savorly-7ef85",
+    "storage_bucket": "savorly-7ef85.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092547273666:android:e20dfc0a9bb2d29b056c5b",
+        "android_client_info": {
+          "package_name": "com.company.savorlyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092547273666-2jfg5gft82sqg29pg94i7ec5fjg3gjro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-WO6axMD7K1k97vNZB2c6fALOzO2tsn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092547273666-2jfg5gft82sqg29pg94i7ec5fjg3gjro.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
