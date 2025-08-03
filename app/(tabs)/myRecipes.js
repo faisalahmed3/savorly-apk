@@ -84,28 +84,34 @@ export default function MyRecipes() {
     );
   }
 
-  if (recipes.length === 0) {
-    return (
-      <View style={styles.centered}>
-        <Text style={{ color: '#333', fontSize: 16 }}>
-          You haven't added any recipes yet.
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <View style={{ flex: 1, backgroundColor: '#f8f8f8' }}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>My Recipes</Text>
       </View>
 
-      <FlatList
-        data={recipes}
-        keyExtractor={(item) => item._id}
-        renderItem={renderRecipeCard}
-        contentContainerStyle={{ padding: 10, paddingBottom: 30 }}
-      />
+      {recipes.length === 0 ? (
+        <View style={styles.centered}>
+          <Text style={{ color: '#333', fontSize: 16 }}>
+            You haven't added any recipes yet.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={recipes}
+          keyExtractor={(item) => item._id}
+          renderItem={renderRecipeCard}
+          contentContainerStyle={{ padding: 10, paddingBottom: 80 }}
+        />
+      )}
+
+      {/* Floating Add Recipe Button */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push('/AddRecipe')}
+      >
+        <Ionicons name="add" size={32} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -158,4 +164,21 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   likeText: { marginLeft: 4, fontSize: 12, fontWeight: '600', color: '#333' },
+
+  fab: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#ff6347',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
 });
