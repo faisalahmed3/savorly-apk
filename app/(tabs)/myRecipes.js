@@ -7,37 +7,31 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import api from '@services/api';
-import { getAuth } from 'firebase/auth';
+import { auth } from '@services/firebase'; // ✅ Use initialized auth
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function MyRecipes() {
   const router = useRouter();
-  const auth = getAuth();
 
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchMyRecipes = async () => {
+  // 🔹 Fetch user's recipes safely
+  const fetchMyRecipes = async (email) => {
     try {
-      const user = auth.currentUser;
-
-      if (!user?.email) {
-        console.log("User not logged in");
-        setError("Please login to view your recipes.");
-        setRecipes([]);
-        setLoading(false);
-        return;
-      }
-
-      const response = await api.get(`/my-recipes?email=${encodeURIComponent(user.email)}`);
+      const response = await api.get(
+        `/my-recipes?email=${encodeURIComponent(email)}`
+      );
       console.log("Fetched Recipes:", response.data);
 
       if (Array.isArray(response.data)) {
         setRecipes(response.data);
+        setError(null);
       } else {
         setRecipes([]);
         setError("No recipes found.");
@@ -51,13 +45,24 @@ export default function MyRecipes() {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      setLoading(true);
-      fetchMyRecipes();
-    }, [])
-  );
+  // 🔹 Listen to auth state changes to handle release builds
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && user.email) {
+        setLoading(true);
+        fetchMyRecipes(user.email);
+      } else {
+        console.log("User not logged in");
+        setError("Please login to view your recipes.");
+        setRecipes([]);
+        setLoading(false);
+      }
+    });
 
+    return unsubscribe;
+  }, []);
+
+  // 🔹 Render each recipe card
   const renderRecipeCard = ({ item }) => (
     <TouchableOpacity
       style={styles.recipeCard}
@@ -70,7 +75,7 @@ export default function MyRecipes() {
         source={
           item.image
             ? { uri: item.image }
-            : require('../../assets/placeholder.png') // ✅ fixed
+            : require('../../assets/placeholder.png') // ✅ fallback image
         }
         style={styles.recipeImage}
         imageStyle={{ borderRadius: 16 }}
@@ -85,6 +90,7 @@ export default function MyRecipes() {
     </TouchableOpacity>
   );
 
+  // 🔹 Loading State
   if (loading) {
     return (
       <View style={styles.centered}>
@@ -93,6 +99,7 @@ export default function MyRecipes() {
     );
   }
 
+  // 🔹 Error State
   if (error) {
     return (
       <View style={styles.centered}>
@@ -103,6 +110,7 @@ export default function MyRecipes() {
     );
   }
 
+  // 🔹 Main UI
   return (
     <View style={{ flex: 1, backgroundColor: '#f8f8f8' }}>
       <View style={styles.header}>

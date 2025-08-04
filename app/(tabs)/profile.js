@@ -10,10 +10,10 @@ import {
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import api from "@services/api";
-import { getAuth, signOut } from "firebase/auth";
+import { auth } from "@services/firebase"; // ✅ Use the initialized auth
+import { signOut } from "firebase/auth";
 
 export default function Profile() {
-  const auth = getAuth();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -23,18 +23,17 @@ export default function Profile() {
     async function fetchProfileData() {
       try {
         const user = auth.currentUser;
-
         let myRecipesCount = 0;
         let totalRecipeCount = 0;
 
         if (user?.email) {
-          // Fetch my recipes
-          const myRecipesRes = await api.get(`/my-recipes?email=${user.email}`);
-          myRecipesCount = myRecipesRes.data.length;
+          // Fetch user's recipes
+          const myRecipesRes = await api.get(`/my-recipes?email=${encodeURIComponent(user.email)}`);
+          myRecipesCount = myRecipesRes.data?.length || 0;
 
           // Fetch total recipes count
           const allRecipesRes = await api.get("/recipes");
-          totalRecipeCount = allRecipesRes.data.length;
+          totalRecipeCount = allRecipesRes.data?.length || 0;
         }
 
         setUserData({
@@ -47,7 +46,14 @@ export default function Profile() {
           totalRecipes: totalRecipeCount,
         });
       } catch (err) {
-        console.error("Failed to fetch profile data", err.message);
+        console.error("Failed to fetch profile data:", err.message);
+        setUserData({
+          name: "Guest",
+          email: "Not Logged In",
+          avatar: "https://i.ibb.co/2gJp5Z2/default-avatar.png",
+          myRecipes: 0,
+          totalRecipes: 0,
+        });
       } finally {
         setLoading(false);
       }

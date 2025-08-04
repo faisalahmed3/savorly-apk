@@ -79,6 +79,7 @@ export default function AddRecipe() {
         <TextInput
           style={styles.input}
           placeholder="Image URL"
+          placeholderTextColor="#999"
           value={form.image}
           onChangeText={(t) => setForm({ ...form, image: t })}
         />
@@ -87,6 +88,7 @@ export default function AddRecipe() {
         <TextInput
           style={styles.input}
           placeholder="Recipe Title"
+          placeholderTextColor="#999"
           value={form.title}
           onChangeText={(t) => setForm({ ...form, title: t })}
         />
@@ -95,6 +97,7 @@ export default function AddRecipe() {
         <TextInput
           style={[styles.input, { height: 80 }]}
           placeholder="Ingredients (comma separated)"
+          placeholderTextColor="#999"
           value={form.ingredients}
           onChangeText={(t) => setForm({ ...form, ingredients: t })}
           multiline
@@ -104,6 +107,7 @@ export default function AddRecipe() {
         <TextInput
           style={[styles.input, { height: 100 }]}
           placeholder="Step-by-step instructions"
+          placeholderTextColor="#999"
           value={form.instructions}
           onChangeText={(t) => setForm({ ...form, instructions: t })}
           multiline
@@ -113,6 +117,7 @@ export default function AddRecipe() {
         <TextInput
           style={styles.input}
           placeholder="Cuisine Type (Italian, Mexican, etc.)"
+          placeholderTextColor="#999"
           value={form.cuisine}
           onChangeText={(t) => setForm({ ...form, cuisine: t })}
         />
@@ -121,6 +126,7 @@ export default function AddRecipe() {
         <TextInput
           style={styles.input}
           placeholder="Preparation Time (minutes)"
+          placeholderTextColor="#999"
           keyboardType="numeric"
           value={form.prepTime}
           onChangeText={(t) => setForm({ ...form, prepTime: t })}
@@ -130,6 +136,7 @@ export default function AddRecipe() {
         <TextInput
           style={styles.input}
           placeholder="YouTube Video Link (optional)"
+          placeholderTextColor="#999"
           value={form.video}
           onChangeText={(t) => setForm({ ...form, video: t })}
         />
@@ -179,6 +186,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     marginBottom: 15,
+    fontSize: 15,
+    color: '#333', // user text color
   },
   label: {
     fontSize: 16,

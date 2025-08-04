@@ -10,10 +10,15 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter your email and password.');
+      return;
+    }
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Successful', `Welcome back ${email}`);
-      router.push('/profile'); // redirect to profile/dashboard
+      router.replace('/profile'); // ✅ use replace to prevent back navigation to login
     } catch (error) {
       Alert.alert('Login Failed', error.message);
     }
@@ -23,17 +28,22 @@ export default function Login() {
     <View style={styles.container}>
       <Text style={styles.title}>Login to Savorly</Text>
 
+      {/* Email Input */}
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#999"   // ✅ Visible placeholder
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+      {/* Password Input */}
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#999"   // ✅ Visible placeholder
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -51,16 +61,42 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
+  container: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    padding: 20, 
+    backgroundColor: '#fff' 
+  },
+  title: { 
+    fontSize: 26, 
+    fontWeight: 'bold', 
+    textAlign: 'center', 
+    marginBottom: 30 
+  },
   input: {
-    borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12,
-    marginBottom: 15, fontSize: 16,
+    borderWidth: 1, 
+    borderColor: '#ccc', 
+    borderRadius: 8, 
+    padding: 12,
+    marginBottom: 15, 
+    fontSize: 16,
+    color: '#333'               // ✅ Ensures typed text is dark and visible
   },
   button: {
-    backgroundColor: '#ff6347', padding: 15, borderRadius: 8,
-    alignItems: 'center', marginBottom: 20,
+    backgroundColor: '#ff6347', 
+    padding: 15, 
+    borderRadius: 8,
+    alignItems: 'center', 
+    marginBottom: 20,
   },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-  link: { textAlign: 'center', color: '#ff6347', fontSize: 16 },
+  buttonText: { 
+    color: '#fff', 
+    fontSize: 18, 
+    fontWeight: 'bold' 
+  },
+  link: { 
+    textAlign: 'center', 
+    color: '#ff6347', 
+    fontSize: 16 
+  },
 });

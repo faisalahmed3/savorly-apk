@@ -37,14 +37,14 @@ export default function Register() {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       const user = result.user;
 
-      // Update display name and photo like web
+      // ✅ Update display name and photo like web
       await updateProfile(user, {
         displayName: name,
         photoURL: photo,
       });
 
       Alert.alert('Success', 'Account created successfully!');
-      router.replace('/profile'); // go to Profile screen
+      router.replace('/profile'); // ✅ use replace to prevent going back to register
     } catch (err) {
       console.error(err.message);
       setError(err.message);
@@ -54,25 +54,31 @@ export default function Register() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <Text style={styles.title}>Register Now!</Text>
 
+      {/* Name */}
       <TextInput
         placeholder="Your Name"
+        placeholderTextColor="#999"   // ✅ visible placeholder
         value={name}
         onChangeText={setName}
         style={styles.input}
       />
 
+      {/* Photo */}
       <TextInput
         placeholder="Photo URL"
+        placeholderTextColor="#999"
         value={photo}
         onChangeText={setPhoto}
         style={styles.input}
       />
 
+      {/* Email */}
       <TextInput
         placeholder="Email"
+        placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -80,8 +86,10 @@ export default function Register() {
         style={styles.input}
       />
 
+      {/* Password */}
       <TextInput
         placeholder="Password"
+        placeholderTextColor="#999"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -130,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
     backgroundColor: '#f9f9f9',
+    color: '#333',                 // ✅ typed text is visible
   },
   button: {
     width: '100%',
