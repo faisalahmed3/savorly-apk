@@ -26,15 +26,26 @@ export default function MyRecipes() {
       const user = auth.currentUser;
 
       if (!user?.email) {
+        console.log("User not logged in");
         setError("Please login to view your recipes.");
+        setRecipes([]);
         setLoading(false);
         return;
       }
 
-      const response = await api.get(`/my-recipes?email=${user.email}`);
-      setRecipes(response.data);
+      const response = await api.get(`/my-recipes?email=${encodeURIComponent(user.email)}`);
+      console.log("Fetched Recipes:", response.data);
+
+      if (Array.isArray(response.data)) {
+        setRecipes(response.data);
+      } else {
+        setRecipes([]);
+        setError("No recipes found.");
+      }
     } catch (err) {
+      console.error("Fetch error:", err.message);
       setError("Failed to load your recipes.");
+      setRecipes([]);
     } finally {
       setLoading(false);
     }
@@ -50,11 +61,17 @@ export default function MyRecipes() {
   const renderRecipeCard = ({ item }) => (
     <TouchableOpacity
       style={styles.recipeCard}
-      onPress={() => router.push(`/recipes/${item._id}`)}
+      onPress={() => {
+        if (item._id) router.push(`/recipes/${item._id}`);
+      }}
       activeOpacity={0.85}
     >
       <ImageBackground
-        source={{ uri: item.image }}
+        source={
+          item.image
+            ? { uri: item.image }
+            : require('../../assets/placeholder.png') // ✅ fixed
+        }
         style={styles.recipeImage}
         imageStyle={{ borderRadius: 16 }}
       >
@@ -63,7 +80,7 @@ export default function MyRecipes() {
           <Ionicons name="heart" size={16} color="#ff4d4d" />
           <Text style={styles.likeText}>{item.likeCount || 0}</Text>
         </View>
-        <Text style={styles.recipeTitle}>{item.title}</Text>
+        <Text style={styles.recipeTitle}>{item.title || 'Untitled'}</Text>
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -79,7 +96,9 @@ export default function MyRecipes() {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={{ color: 'red' }}>{error}</Text>
+        <Text style={{ color: 'red', textAlign: 'center', paddingHorizontal: 20 }}>
+          {error}
+        </Text>
       </View>
     );
   }
@@ -99,7 +118,7 @@ export default function MyRecipes() {
       ) : (
         <FlatList
           data={recipes}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item, index) => item._id || index.toString()}
           renderItem={renderRecipeCard}
           contentContainerStyle={{ padding: 10, paddingBottom: 80 }}
         />
@@ -141,7 +160,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   recipeImage: { width: '100%', height: 200, justifyContent: 'flex-end' },
-  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: 16 },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    borderRadius: 16,
+  },
   recipeTitle: {
     color: '#fff',
     fontWeight: 'bold',

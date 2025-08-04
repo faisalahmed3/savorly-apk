@@ -26,14 +26,14 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     // ✅ Must match your Kotlin package & folder structure
-    namespace "com.company.savorlyapp"
+    namespace 'com.company.savorlyapp'
 
     defaultConfig {
-        applicationId "com.company.savorlyapp"
+        applicationId 'com.company.savorlyapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
 
     signingConfigs {
@@ -105,3 +105,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
